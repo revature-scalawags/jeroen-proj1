@@ -5,21 +5,23 @@ import org.apache.hadoop.io.LongWritable
 import org.apache.hadoop.io.IntWritable
 import org.apache.hadoop.io.Text
 
-class WordMapper extends Mapper[LongWritable, Text, Text, IntWritable]{
+class WikiMapper extends Mapper[LongWritable, Text, Text, IntWritable]{
 
-    override def map(key: LongWritable,
+    override def map(
+      key: LongWritable,
       value: Text,
       context: Mapper[LongWritable, Text, Text, IntWritable]#Context
-    ): Unit ={
-        val line = value.toString
+  ): Unit = {
+    val line = value.toString
 
-    line
-      .split("\\W+")
-      .filter(_.length > 0)
-      .map(_.toUpperCase)
-      .foreach((word: String) => {
-        context.write(new Text(word), new IntWritable(1))
-      })
-    }
-
+    val lineArray = line.split("\\s").filter(_.length > 0)
+    var destination = ""
+    var checker = false 
+      if (lineArray(2) == "link") checker = true
+      if (checker == true)  {
+        destination = lineArray(0)
+        context.write(new Text(destination), new IntWritable(1))
+        checker = false
+      }
+  }
 }

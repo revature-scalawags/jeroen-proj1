@@ -15,7 +15,7 @@ object Main extends App{
     
     if(args.length !=2){
         println("Usage: Main [input dir] [output dir]")
-        system.exit(-1)
+        System.exit(-1)
     }
 
     val job = Job.getInstance()
@@ -33,7 +33,7 @@ object Main extends App{
     job.setOutputKeyClass(classOf[Text])
     job.setOutputValueClass(classOf[IntWritable])
 
-    val sucess = job.waitForCompletion(true)
+    val success = job.waitForCompletion(true)
     System.exit(if (success) 0 else 1)
 
 }
